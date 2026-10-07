@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supervision CP Lab 400</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --alu:#e6e9ec; --panel:#ffffff; --ink:#16212b; --muted:#5d6a75; --line:#c4cad0;
+  --blue:#0a8ad0; --run:#1f9d55; --warn:#e8a317; --alarm:#cf3b3b; --off:#8c969f;
+  --red:#cf3b3b; --green:#1f9d55; --bluec:#0a8ad0; --black:#16212b;
+  --f-body:"Barlow",system-ui,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-num:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--alu);color:var(--ink);font:16px/1.45 var(--f-body)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* top bar */
+.bar{background:var(--ink);color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding:10px 20px}
+.bar h1{font:600 26px/1 var(--f-num);margin:0;letter-spacing:.01em}
+.bar h1 small{font:400 15px var(--f-body);color:#9fb3c3;margin-left:10px}
+.conn{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-left:auto}
+.conn input{background:#24323e;border:1px solid #3a4a57;border-radius:4px;padding:6px 8px;color:#fff;width:150px}
+.conn input.url{width:220px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:14px;padding:4px 10px;border-radius:999px;background:#24323e}
+.pill i{width:10px;height:10px;border-radius:50%;background:var(--alarm)}
+.pill.ok i{background:var(--run)}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:4px;padding:7px 14px;cursor:pointer}
+.btn.sec{background:var(--muted)}
+.btn.warn{background:var(--alarm)}
+.btn.small{padding:4px 9px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+nav{display:flex;gap:4px;padding:0 20px;background:var(--ink)}
+nav button{background:none;border:0;color:#9fb3c3;padding:10px 16px;cursor:pointer;border-bottom:4px solid transparent;font-weight:500}
+nav button[aria-selected=true]{color:#fff;border-bottom-color:var(--blue)}
+
+main{padding:20px;max-width:1500px;margin:0 auto}
+section[hidden]{display:none}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px}
+.box h2{font:600 20px var(--f-num);margin:0 0 12px;color:var(--ink)}
+.grid2{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px;margin-top:16px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.muted{color:var(--muted)}
+.empty{color:var(--muted);padding:12px 0}
+
+/* ---------- line synoptic (the memorable element) ---------- */
+.line{position:relative;display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:8px 2px 18px}
+.line::before{content:"";position:absolute;left:0;right:0;top:50%;height:14px;margin-top:-7px;
+  background:repeating-linear-gradient(90deg,#b7bec5 0 18px,#a7afb7 18px 22px);border-radius:7px;z-index:0}
+.st{position:relative;z-index:1;flex:1 0 190px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px 10px;border-top:8px solid var(--off)}
+.st.RUN{border-top-color:var(--run)} .st.WAIT{border-top-color:var(--warn)}
+.st h3{margin:0;font:600 18px var(--f-num)} .st h3 span{font:400 14px var(--f-body);color:var(--muted);margin-left:6px}
+.st .n{font:700 64px/1 var(--f-num);font-variant-numeric:tabular-nums;margin:6px 0 4px}
+.st .meta{font-size:14px;color:var(--muted)}
+.st .tk{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:4px;color:#fff;font-size:13px;background:var(--off)}
+.tk.ok{background:var(--run)} .tk.slow{background:var(--warn)} .tk.bad{background:var(--alarm)}
+.st .offline{color:var(--alarm);font-size:13px}
+.buf{position:relative;z-index:1;flex:0 0 132px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.slots{display:flex;gap:4px;background:var(--alu);padding:6px;border-radius:6px;border:1px solid var(--line)}
+.slot{width:18px;height:34px;border-radius:3px;background:var(--panel);border:1px solid var(--line)}
+.slot.f{border-color:transparent}
+.buf.ok .slot.f{background:var(--run)} .buf.limit .slot.f,.buf.error .slot.f{background:var(--warn)} .buf.over .slot.f{background:var(--alarm)}
+.buf .lab{font:600 15px var(--f-num);background:var(--panel);padding:0 8px;border-radius:4px}
+.buf.over .lab{color:var(--alarm)} .buf .say{font-size:12px;color:var(--muted);background:var(--panel);padding:0 6px;border-radius:4px}
+
+/* colour progress */
+.cbar{display:grid;grid-template-columns:22px 70px 1fr 90px;align-items:center;gap:10px;margin:8px 0}
+.sw{width:22px;height:22px;border-radius:4px}
+.trk{height:14px;background:var(--alu);border-radius:3px;overflow:hidden}
+.trk div{height:100%}
+.cbar .v{text-align:right;font:600 18px var(--f-num);font-variant-numeric:tabular-nums}
+.RED{background:var(--red)} .GREEN{background:var(--green)} .BLUE{background:var(--bluec)} .BLACK{background:var(--black)} .UNKNOWN{background:var(--off)}
+.kpis{display:flex;flex-wrap:wrap;gap:24px;margin-top:12px;font-size:15px}
+.kpis b{font:600 22px var(--f-num)}
+
+form.of{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+form label{display:flex;flex-direction:column;font-size:14px;color:var(--muted);gap:4px}
+form input,form select,form textarea{border:1px solid var(--line);border-radius:4px;padding:6px 8px;background:var(--panel);color:var(--ink)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+.log{max-height:300px;overflow:auto;font-size:14px}
+.log div{padding:5px 8px;border-bottom:1px solid var(--alu)}
+.log .a-quality,.log .e-ABNORMAL{background:#fbeaea} .log .a-supervisor{background:#fdf6e6}
+.log time{color:var(--muted);margin-right:8px;font-variant-numeric:tabular-nums}
+
+/* maintenance cards */
+.mach{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.mc{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.mc .state{padding:14px 16px;color:#fff;background:var(--off)}
+.mc.RUN .state{background:var(--run)} .mc.ABNORMAL .state{background:var(--alarm)}
+.mc .state h3{margin:0;font:600 18px var(--f-num);opacity:.9}
+.mc .state p{margin:2px 0 0;font:700 34px/1.1 var(--f-num)}
+.mc .state small{display:block;min-height:18px}
+.mc .body{padding:12px 16px}
+.mc .nums{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;gap:6px;margin-bottom:10px}
+.mc .nums b{display:block;font:700 30px/1 var(--f-num)} .mc .nums b.hot{color:var(--alarm)}
+.mc .nums span{font-size:12px;color:var(--muted)}
+.mc .plan{font-size:14px;margin:4px 0;padding:6px 8px;border-radius:4px;background:#e6f2fa}
+.mc .plan.cur{background:#fcecdc}
+.mc .plan em{font-style:normal;color:var(--muted);display:block;font-size:12px}
+.meter{height:8px;background:var(--alu);border-radius:4px;overflow:hidden;margin:8px 0 2px}
+.meter div{height:100%;background:var(--blue)}
+
+/* devices */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);padding:6px}
+td{padding:6px;border-bottom:1px solid var(--alu);vertical-align:top}
+tr.off td{color:var(--off)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;background:var(--alarm)}
+.dot.on{background:var(--run)} .dot.mute{background:var(--warn)}
+.tw{overflow-x:auto}
+
+#toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:6px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none}
+#toast.show{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <h1>Supervision CP Lab 400 <small>coques smartphone</small></h1>
+  <div class="conn">
+    <input class="url" id="url" aria-label="Adresse du broker WebSocket" placeholder="ws://192.168.1.10:9001">
+    <input id="user" aria-label="Utilisateur MQTT" placeholder="utilisateur (option)">
+    <input id="pass" type="password" aria-label="Mot de passe MQTT" placeholder="mot de passe">
+    <button class="btn" id="connect">Connecter</button>
+    <span class="pill" id="status"><i></i><span>Deconnecte</span></span>
+  </div>
+</header>
+<nav role="tablist">
+  <button role="tab" aria-selected="true" data-tab="prod">Production</button>
+  <button role="tab" aria-selected="false" data-tab="maint">Maintenance</button>
+  <button role="tab" aria-selected="false" data-tab="dev">Tab5 et messages</button>
+</nav>
+
+<main>
+<!-- ================= PRODUCTION ================= -->
+<section id="v-prod">
+  <div class="box">
+    <h2 id="lineTitle">Ligne</h2>
+    <div class="line" id="line"></div>
+    <div class="kpis" id="kpis"></div>
+  </div>
+  <div class="grid2">
+    <div class="box">
+      <h2>Ordre de fabrication</h2>
+      <div id="colors"></div>
+      <form class="of" id="ofForm" style="margin-top:16px">
+        <label>Numero OF<input name="of" value="OF-001"></label>
+        <label>Rouge<input name="RED" type="number" min="0" value="5"></label>
+        <label>Vert<input name="GREEN" type="number" min="0" value="5"></label>
+        <label>Bleu<input name="BLUE" type="number" min="0" value="5"></label>
+        <label>Noir<input name="BLACK" type="number" min="0" value="5"></label>
+        <label>Takt (s)<input name="takt_s" type="number" min="1" value="20"></label>
+        <label>WIP max par buffer<input name="wip_max" type="number" min="1" max="8" value="3"></label>
+      </form>
+      <div class="actions">
+        <button class="btn" data-act="sendOrder">Lancer l'OF</button>
+        <button class="btn sec" data-act="resetProd">Remettre les compteurs a zero</button>
+      </div>
+    </div>
+    <div class="box">
+      <h2>Andon</h2>
+      <div class="log" id="andon"><div class="empty">Aucun appel Andon.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MAINTENANCE ================= -->
+<section id="v-maint" hidden>
+  <div class="mach" id="machines"></div>
+  <div class="grid2">
+    <div class="box">
+      <h2>Planifier les actions</h2>
+      <form id="planForm" class="of">
+        <label>Machine<select name="id"><option>m1</option><option>m2</option><option>m3</option><option>m4</option></select></label>
+        <label>Date preventive<input name="pd" type="date"></label>
+        <label style="grid-column:span 2">Tache preventive<input name="pt" placeholder="Graissage convoyeur"></label>
+        <label>Date curative<input name="cd" type="date"></label>
+        <label style="grid-column:span 2">Tache curative<input name="ct" placeholder="Remplacer la courroie"></label>
+      </form>
+      <div class="actions"><button class="btn" data-act="savePlan">Enregistrer le plan</button></div>
+      <p class="muted" style="font-size:14px">Le plan est stocke par Node-RED, qui renvoie les statistiques a la Tab5 de la machine.</p>
+    </div>
+    <div class="box">
+      <h2>Journal des changements d'etat</h2>
+      <div class="log" id="events"><div class="empty">Aucun changement observe depuis l'ouverture de la page.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEVICES & MESSAGES ================= -->
+<section id="v-dev" hidden>
+  <div class="box">
+    <h2>Tab5 connectees</h2>
+    <div class="tw" id="devices"><div class="empty">Aucune Tab5 vue pour l'instant. Verifiez la connexion au broker.</div></div>
+  </div>
+  <div class="grid2">
+    <div class="box">
+      <h2>Envoyer un message</h2>
+      <form id="msgForm" class="of">
+        <label>Destinataire<select name="target" id="target">
+          <option value="all">Toutes les Tab5</option><option value="prod">Groupe production</option><option value="maint">Groupe maintenance</option>
+        </select></label>
+        <label>Niveau<select name="level"><option value="info">Information</option><option value="warn">Attention</option><option value="alarm">Alarme</option></select></label>
+        <label>Duree (s)<input name="duration" type="number" min="3" max="600" value="15"></label>
+        <label style="grid-column:1/-1">Texte (sans accents de preference)<textarea name="text" rows="3"></textarea></label>
+      </form>
+      <div class="actions"><button class="btn" data-act="sendMsg">Envoyer le message</button></div>
+    </div>
+    <div class="box">
+      <h2>Accuses de lecture</h2>
+      <div class="log" id="acks"><div class="empty">Aucun accuse recu.</div></div>
+    </div>
+  </div>
+</section>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- mqtt.js: local copy first (offline lab), CDN otherwise -->
+<script src="mqtt.min.js"></script>
+<script>
+if (!window.mqtt) document.write('<script src="https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js"><\/script>');
+</script>
+<script>
+"use strict";
+const ROOT = "cplab";
+const COLORS = ["RED","GREEN","BLUE","BLACK"];
+const COL_FR = {RED:"Rouge",GREEN:"Vert",BLUE:"Bleu",BLACK:"Noir",UNKNOWN:"Inconnu"};
+const DEVICES = ["prod-st1","prod-st2","prod-st3","prod-color","prod-hmi","maint-m1","maint-m2","maint-m3","maint-m4"];
+const S = { stations:{}, color:{}, lastColor:null, order:{}, machines:{}, stats:{}, devices:{}, andon:[], events:[], acks:[] };
+let client = null, raf = 0, orderFormTouched = false;
+
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hm = ts => new Date(ts).toLocaleTimeString("fr-FR");
+function toast(t){ const e=$("#toast"); e.textContent=t; e.classList.add("show"); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove("show"),2200); }
+function store(k,v){ try{ localStorage.setItem("cplab."+k,v); }catch(e){} }
+function load(k,d){ try{ return localStorage.getItem("cplab."+k) ?? d; }catch(e){ return d; } }
+
+// ------------------------------------------------------------- connection
+$("#url").value = load("url", `ws://${location.hostname || "localhost"}:9001`);
+$("#user").value = load("user", "");
+DEVICES.forEach(d => $("#target").insertAdjacentHTML("beforeend", `<option value="${d}">${d}</option>`));
+
+function setStatus(ok, text){ $("#status").classList.toggle("ok", ok); $("#status span").textContent = text; }
+
+function connect(){
+  if (!window.mqtt){ toast("mqtt.min.js introuvable : copiez-le a cote de index.html"); return; }
+  if (client){ client.end(true); client = null; }
+  const url = $("#url").value.trim(); store("url", url); store("user", $("#user").value);
+  setStatus(false, "Connexion...");
+  client = mqtt.connect(url, { username: $("#user").value || undefined, password: $("#pass").value || undefined,
+    clientId: "cplab-web-" + Math.random().toString(16).slice(2, 8), reconnectPeriod: 3000, connectTimeout: 6000 });
+  client.on("connect", () => { setStatus(true, "Connecte"); client.subscribe(ROOT + "/#", { qos: 1 }); });
+  client.on("reconnect", () => setStatus(false, "Reconnexion..."));
+  client.on("close", () => setStatus(false, "Deconnecte"));
+  client.on("error", e => setStatus(false, "Erreur : " + e.message));
+  client.on("message", onMessage);
+}
+$("#connect").addEventListener("click", connect);
+
+function pub(topic, obj, retain=false){
+  if (!client || !client.connected){ toast("Non connecte au broker"); return false; }
+  client.publish(topic, typeof obj === "string" ? obj : JSON.stringify(obj), { qos: 1, retain });
+  return true;
+}
+
+// ------------------------------------------------------------- routing
+function onMessage(topic, buf){
+  const txt = buf.toString(); let j = null;
+  try { j = JSON.parse(txt); } catch(e) {}
+  const t = topic.split("/"); const now = Date.now();
+  if (t[1] === "prod"){
+    if (/^st[1-4]$/.test(t[2]) && t[3] === "count" && j) S.stations[t[2]] = Object.assign(j, { seen: now });
+    else if (t[2] === "color" && t[3] === "count" && j) S.color = j;
+    else if (t[2] === "color" && t[3] === "last" && j) S.lastColor = j;
+    else if (t[2] === "order" && j){ S.order = j; fillOrderForm(); }
+    else if (t[2] === "andon" && j){ S.andon.unshift(Object.assign({ ts: now }, j)); S.andon = S.andon.slice(0, 30); toast("Andon : " + (j.type === "quality" ? "alerte qualite" : "appel superviseur")); }
+  } else if (t[1] === "maint" && j){
+    const id = t[2];
+    if (t[3] === "state"){
+      const prev = S.machines[id];
+      if (prev && prev.state !== j.state){ S.events.unshift({ ts: now, id, from: prev.state, to: j.state, reason: j.reason, sim: j.sim }); S.events = S.events.slice(0, 80); }
+      S.machines[id] = Object.assign(j, { seen: now });
+    } else if (t[3] === "stats") S.stats[id] = j;
+    else if (t[3] === "ack") { S.events.unshift({ ts: now, id, to: "ACK", reason: j.by || "" }); }
+  } else if (t[1] === "status"){
+    const d = S.devices[t[2]] = S.devices[t[2]] || { id: t[2] }; d.online = txt === "online";
+  } else if (t[1] === "hb" && j){
+    const d = S.devices[t[2]] = Object.assign(S.devices[t[2]] || {}, j, { id: t[2], online: true, seen: now });
+  } else if (t[1] === "ack" && j){
+    S.acks.unshift({ ts: now, id: t[2], text: j.text }); S.acks = S.acks.slice(0, 40);
+  }
+  schedule();
+}
+function schedule(){ if (!raf) raf = requestAnimationFrame(() => { raf = 0; render(); }); }
+
+// ------------------------------------------------------------- render
+function render(){ renderLine(); renderColors(); renderAndon(); renderMachines(); renderEvents(); renderDevices(); renderAcks(); }
+
+function wipMax(){ return Number(S.order.wip_max) || 3; }
+function online(id){ const d = S.devices[id]; return d ? d.online : null; }
+
+function renderLine(){
+  const keys = ["st1","st2","st3","st4"], devs = ["prod-st1","prod-st2","prod-st3","prod-color"], max = wipMax();
+  const takt = Number(S.order.takt_s) || 0;
+  $("#lineTitle").textContent = "Ligne" + (S.order.of ? "  -  " + S.order.of : "");
+  let h = "";
+  keys.forEach((k, i) => {
+    const s = S.stations[k] || {};
+    let tk = "", tkc = "";
+    if (s.cycle_ms && takt){ const r = s.cycle_ms / (takt * 1000); tkc = r <= 1 ? "ok" : r <= 1.15 ? "slow" : "bad"; tk = (s.cycle_ms/1000).toFixed(1) + " s / takt " + takt + " s"; }
+    const on = online(devs[i]);
+    h += `<article class="st ${esc(s.state || "")}">
+      <h3>Poste ${i+1}<span>${esc(s.name || "")}</span></h3>
+      <div class="n">${s.count ?? "--"}</div>
+      <div class="meta">${s.cadence ?? 0} pcs/min</div>
+      ${tk ? `<span class="tk ${tkc}">${tk}</span>` : ""}
+      ${on === false ? `<div class="offline">Tab5 hors ligne</div>` : ""}
+    </article>`;
+    if (i < 3){
+      const a = S.stations[k], b = S.stations[keys[i+1]];
+      const wip = a && b ? a.count - b.count : null;
+      const lvl = wip === null ? "" : wip < 0 ? "error" : wip > max ? "over" : wip === max ? "limit" : "ok";
+      const say = wip === null ? "en attente" : wip < 0 ? "ecart comptage" : wip > max ? "stop kanban" : wip === max ? "limite" : "produire";
+      let slots = ""; for (let n = 0; n < Math.min(max, 8); n++) slots += `<span class="slot ${wip !== null && n < wip ? "f" : ""}"></span>`;
+      h += `<div class="buf ${lvl}" title="Buffer poste ${i+1} vers poste ${i+2}">
+        <div class="slots">${slots}</div><span class="lab">WIP ${wip ?? "?"} / ${max}</span><span class="say">${say}</span></div>`;
+    }
+  });
+  $("#line").innerHTML = h;
+  let bott = null; keys.forEach(k => { const s = S.stations[k]; if (s && s.cycle_ms && (!bott || s.cycle_ms > bott.c)) bott = { k, c: s.cycle_ms }; });
+  const wipTot = [0,1,2].reduce((t,i) => { const a=S.stations[keys[i]], b=S.stations[keys[i+1]]; return t + (a && b ? a.count - b.count : 0); }, 0);
+  const target = COLORS.reduce((t,c) => t + (Number(S.order.qty?.[c]) || 0), 0);
+  $("#kpis").innerHTML = `
+    <span>Sorties <b>${S.stations.st4?.count ?? "--"}${target ? " / " + target : ""}</b></span>
+    <span>En-cours total <b>${wipTot}</b></span>
+    <span>Goulot <b>${bott ? "poste " + bott.k.slice(2) + " (" + (bott.c/1000).toFixed(1) + " s)" : "--"}</b></span>
+    <span>Derniere piece <b>${S.lastColor ? esc(COL_FR[S.lastColor.color] || S.lastColor.color) : "--"}</b></span>`;
+}
+
+function renderColors(){
+  const q = S.order.qty || {};
+  let h = "";
+  [...COLORS, "UNKNOWN"].forEach(c => {
+    const n = Number(S.color[c]) || 0, t = Number(q[c]) || 0;
+    if (c === "UNKNOWN" && !n) return;
+    const pct = t ? Math.min(100, 100 * n / t) : 0;
+    h += `<div class="cbar"><span class="sw ${c}"></span><span>${COL_FR[c]}</span>
+      <div class="trk"><div class="${n > t && t ? "" : c}" style="width:${pct}%;${n > t && t ? "background:var(--warn)" : ""}"></div></div>
+      <span class="v">${n}${t ? " / " + t : ""}</span></div>`;
+  });
+  $("#colors").innerHTML = h;
+}
+
+function renderAndon(){
+  if (!S.andon.length) return;
+  $("#andon").innerHTML = S.andon.map(a => `<div class="a-${esc(a.type)}"><time>${hm(a.ts)}</time><b>${a.type === "quality" ? "Alerte qualite" : "Appel superviseur"}</b> depuis ${esc(a.from)}</div>`).join("");
+}
+
+const ST_FR = { RUN: "En marche", OFF: "Arret", ABNORMAL: "Anomalie" };
+function since(s){ s = Number(s) || 0; return s < 3600 ? `${Math.floor(s/60)} min ${String(s%60).padStart(2,"0")} s` : `${Math.floor(s/3600)} h ${String(Math.floor(s%3600/60)).padStart(2,"0")} min`; }
+function renderMachines(){
+  let h = "";
+  ["m1","m2","m3","m4"].forEach(id => {
+    const m = S.machines[id] || {}, st = S.stats[id] || {};
+    const pct = m.th_high ? Math.min(100, 100 * (m.activity || 0) / (m.th_high * 1.5)) : 0;
+    const on = online("maint-" + id);
+    h += `<article class="mc ${esc(m.state || "")}">
+      <div class="state"><h3>${id.toUpperCase()} ${esc(m.name || "")}</h3>
+        <p>${ST_FR[m.state] || "Pas de donnees"}</p>
+        <small>${m.state ? "depuis " + since(m.since_s) : ""} ${esc(m.reason || "")} ${m.sim ? "(simulation)" : ""}</small></div>
+      <div class="body">
+        <div class="nums">
+          <div><b class="${st.day > 0 ? "hot" : ""}">${st.day ?? "--"}</b><span>pannes 24 h</span></div>
+          <div><b class="${st.week > 0 ? "hot" : ""}">${st.week ?? "--"}</b><span>pannes 7 jours</span></div>
+          <div><b>${st.mttr_min ?? "--"}</b><span>MTTR (min)</span></div>
+        </div>
+        <div class="plan"><em>Prochaine preventive</em>${st.next_prev ? esc(st.next_prev.date + "  " + st.next_prev.task) : "non planifiee"}</div>
+        <div class="plan cur"><em>Prochaine curative</em>${st.next_cur ? esc(st.next_cur.date + "  " + st.next_cur.task) : "aucune"}</div>
+        <div class="meter" title="Niveau vibratoire"><div style="width:${pct}%"></div></div>
+        <div class="muted" style="font-size:13px">Activite ${m.activity ?? "--"} (seuils ${m.th_off ?? "-"} / ${m.th_high ?? "-"})${on === false ? " - Tab5 hors ligne" : ""}</div>
+        <div class="actions">
+          <button class="btn small" data-act="ack" data-id="${id}">Acquitter</button>
+          <button class="btn small sec" data-act="mcmd" data-id="${id}" data-cmd="learn">Apprendre</button>
+          <button class="btn small warn" data-act="mcmd" data-id="${id}" data-cmd="sim_fault">Simuler panne</button>
+          <button class="btn small sec" data-act="mcmd" data-id="${id}" data-cmd="sim_end">Fin simulation</button>
+        </div>
+      </div></article>`;
+  });
+  $("#machines").innerHTML = h;
+}
+
+function renderEvents(){
+  if (!S.events.length) return;
+  $("#events").innerHTML = S.events.map(e => `<div class="e-${esc(e.to)}"><time>${hm(e.ts)}</time><b>${e.id.toUpperCase()}</b> ${esc(e.from || "")} vers ${esc(e.to)} ${esc(e.reason || "")}${e.sim ? " (sim)" : ""}</div>`).join("");
+}
+
+function renderDevices(){
+  const list = Object.values(S.devices).sort((a,b) => a.id.localeCompare(b.id));
+  if (!list.length) return;
+  const now = Date.now();
+  $("#devices").innerHTML = `<table><thead><tr><th>Tab5</th><th>Etat</th><th>Adresse IP</th><th>RSSI</th><th>En service depuis</th><th>Firmware</th><th>Actions</th></tr></thead><tbody>` +
+    list.map(d => {
+      const mute = d.online && d.seen && now - d.seen > 30000;
+      return `<tr class="${d.online ? "" : "off"}"><td><b>${esc(d.id)}</b><br><span class="muted">${esc(d.title || "")}</span></td>
+        <td><span class="dot ${d.online ? (mute ? "mute" : "on") : ""}"></span>${d.online ? (mute ? "muette" : "en ligne") : "hors ligne"}</td>
+        <td>${esc(d.ip || "-")}</td><td>${d.rssi ?? "-"}</td><td>${d.up ? since(d.up) : "-"}</td><td>${esc(d.fw || "-")}</td>
+        <td><button class="btn small" data-act="msgTo" data-id="${esc(d.id)}">Message</button>
+            <button class="btn small sec" data-act="dcmd" data-id="${esc(d.id)}" data-cmd="identify">Identifier</button>
+            <button class="btn small warn" data-act="dcmd" data-id="${esc(d.id)}" data-cmd="reboot">Redemarrer</button></td></tr>`;
+    }).join("") + `</tbody></table>`;
+}
+
+function renderAcks(){
+  if (!S.acks.length) return;
+  $("#acks").innerHTML = S.acks.map(a => `<div><time>${hm(a.ts)}</time><b>${esc(a.id)}</b> a affiche : ${esc(a.text)}</div>`).join("");
+}
+
+// ------------------------------------------------------------- forms
+function fillOrderForm(){
+  if (orderFormTouched) return;
+  const f = $("#ofForm");
+  if (S.order.of) f.of.value = S.order.of;
+  COLORS.forEach(c => { if (S.order.qty && S.order.qty[c] != null) f[c].value = S.order.qty[c]; });
+  if (S.order.takt_s) f.takt_s.value = S.order.takt_s;
+  if (S.order.wip_max) f.wip_max.value = S.order.wip_max;
+}
+$("#ofForm").addEventListener("input", () => orderFormTouched = true);
+
+const actions = {
+  sendOrder(){
+    const f = $("#ofForm"), qty = {};
+    COLORS.forEach(c => qty[c] = Number(f[c].value) || 0);
+    if (pub(ROOT + "/prod/order", { of: f.of.value.trim(), qty, takt_s: Number(f.takt_s.value) || 20, wip_max: Number(f.wip_max.value) || 3, ts: Date.now() }, true)){
+      orderFormTouched = false; toast("OF lance");
+    }
+  },
+  resetProd(){
+    if (confirm("Remettre a zero les compteurs des 4 postes de production ?") && pub(ROOT + "/cmd/prod/action", { cmd: "reset" })) toast("Compteurs remis a zero");
+  },
+  savePlan(){
+    const f = $("#planForm");
+    const plan = { prev: f.pd.value || f.pt.value ? { date: f.pd.value, task: f.pt.value } : null,
+                   cur:  f.cd.value || f.ct.value ? { date: f.cd.value, task: f.ct.value } : null };
+    if (pub(`${ROOT}/maint/${f.id.value}/plan/set`, plan)) toast("Plan enregistre pour " + f.id.value.toUpperCase());
+  },
+  ack(el){ if (pub(`${ROOT}/maint/${el.dataset.id}/ack`, { id: el.dataset.id, by: "superviseur web" })) toast("Acquitte"); },
+  mcmd(el){ if (pub(`${ROOT}/cmd/maint-${el.dataset.id}/action`, { cmd: el.dataset.cmd })) toast("Commande envoyee"); },
+  dcmd(el){
+    if (el.dataset.cmd === "reboot" && !confirm("Redemarrer " + el.dataset.id + " ?")) return;
+    if (pub(`${ROOT}/cmd/${el.dataset.id}/action`, { cmd: el.dataset.cmd })) toast("Commande envoyee");
+  },
+  msgTo(el){ $("#target").value = el.dataset.id; $("#msgForm").text.focus(); },
+  sendMsg(){
+    const f = $("#msgForm"), text = f.text.value.trim();
+    if (!text){ toast("Ecrivez un texte"); f.text.focus(); return; }
+    if (pub(`${ROOT}/cmd/${f.target.value}/msg`, { text, level: f.level.value, duration: Number(f.duration.value) || 15, from: "Superviseur" })){
+      f.text.value = ""; toast("Message envoye a " + f.target.value);
+    }
+  }
+};
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]"); if (el && actions[el.dataset.act]) { e.preventDefault(); actions[el.dataset.act](el); }
+  const tab = e.target.closest("[data-tab]");
+  if (tab){
+    document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", b === tab));
+    ["prod","maint","dev"].forEach(v => $("#v-" + v).hidden = v !== tab.dataset.tab);
+  }
+});
+
+render();
+setInterval(schedule, 1000);           // refresh "since" timers and stale states
+window.addEventListener("load", () => setTimeout(connect, 300));
+</script>
+</body>
+</html>

@@ -1,0 +1,1165 @@
+[
+ {
+  "id": "cplabt001",
+  "type": "tab",
+  "label": "CPLab Production",
+  "disabled": false,
+  "info": "Production tracking: counts per station, kanban buffers, colours, OF (order), Andon."
+ },
+ {
+  "id": "cplabt002",
+  "type": "tab",
+  "label": "CPLab Maintenance",
+  "disabled": false,
+  "info": "Machine states from vibration, breakdown history (24 h / 7 days), MTBF/MTTR, maintenance plan."
+ },
+ {
+  "id": "cplabt003",
+  "type": "tab",
+  "label": "CPLab Supervision",
+  "disabled": false,
+  "info": "Device registry (LWT + heartbeat), messages to one / group / all Tab5, remote actions."
+ },
+ {
+  "id": "cplabt004",
+  "type": "tab",
+  "label": "CPLab Simulator",
+  "disabled": false,
+  "info": "Publishes fake but coherent data on the real topics to test dashboards / web site / HMI without the line."
+ },
+ {
+  "id": "cplabb005",
+  "type": "mqtt-broker",
+  "name": "Mosquitto local",
+  "broker": "localhost",
+  "port": "1883",
+  "clientid": "",
+  "autoConnect": true,
+  "usetls": false,
+  "protocolVersion": "4",
+  "keepalive": "60",
+  "cleansession": true,
+  "autoUnsubscribe": true,
+  "birthTopic": "cplab/status/nodered",
+  "birthQos": "1",
+  "birthRetain": "true",
+  "birthPayload": "online",
+  "birthMsg": {},
+  "closeTopic": "",
+  "closeQos": "0",
+  "closeRetain": "false",
+  "closePayload": "",
+  "closeMsg": {},
+  "willTopic": "cplab/status/nodered",
+  "willQos": "1",
+  "willRetain": "true",
+  "willPayload": "offline",
+  "willMsg": {},
+  "userProps": "",
+  "sessionExpiry": ""
+ },
+ {
+  "id": "cplabu006",
+  "type": "ui-base",
+  "name": "CPLab",
+  "path": "/dashboard",
+  "appIcon": "",
+  "includeClientData": true,
+  "acceptsClientConfig": [
+   "ui-notification",
+   "ui-control"
+  ],
+  "showPathInSidebar": false,
+  "showPageTitle": true,
+  "navigationStyle": "default",
+  "titleBarStyle": "default"
+ },
+ {
+  "id": "cplabu007",
+  "type": "ui-theme",
+  "name": "CPLab theme",
+  "colors": {
+   "surface": "#16212b",
+   "primary": "#0a8ad0",
+   "bgPage": "#e6e9ec",
+   "groupBg": "#ffffff",
+   "groupOutline": "#c4cad0"
+  },
+  "sizes": {
+   "density": "default",
+   "pagePadding": "12px",
+   "groupGap": "12px",
+   "groupBorderRadius": "6px",
+   "widgetGap": "12px"
+  }
+ },
+ {
+  "id": "cplabp008",
+  "type": "ui-page",
+  "name": "Production",
+  "ui": "cplabu006",
+  "path": "/production",
+  "icon": "mdi-factory",
+  "layout": "grid",
+  "theme": "cplabu007",
+  "breakpoints": [
+   {
+    "name": "Default",
+    "px": "0",
+    "cols": "3"
+   },
+   {
+    "name": "Tablet",
+    "px": "576",
+    "cols": "6"
+   },
+   {
+    "name": "Desktop",
+    "px": "1024",
+    "cols": "12"
+   }
+  ],
+  "order": 1,
+  "className": "",
+  "visible": "true",
+  "disabled": "false"
+ },
+ {
+  "id": "cplabp009",
+  "type": "ui-page",
+  "name": "Maintenance",
+  "ui": "cplabu006",
+  "path": "/maintenance",
+  "icon": "mdi-wrench",
+  "layout": "grid",
+  "theme": "cplabu007",
+  "breakpoints": [
+   {
+    "name": "Default",
+    "px": "0",
+    "cols": "3"
+   },
+   {
+    "name": "Tablet",
+    "px": "576",
+    "cols": "6"
+   },
+   {
+    "name": "Desktop",
+    "px": "1024",
+    "cols": "12"
+   }
+  ],
+  "order": 2,
+  "className": "",
+  "visible": "true",
+  "disabled": "false"
+ },
+ {
+  "id": "cplabp010",
+  "type": "ui-page",
+  "name": "Supervision",
+  "ui": "cplabu006",
+  "path": "/supervision",
+  "icon": "mdi-monitor-dashboard",
+  "layout": "grid",
+  "theme": "cplabu007",
+  "breakpoints": [
+   {
+    "name": "Default",
+    "px": "0",
+    "cols": "3"
+   },
+   {
+    "name": "Tablet",
+    "px": "576",
+    "cols": "6"
+   },
+   {
+    "name": "Desktop",
+    "px": "1024",
+    "cols": "12"
+   }
+  ],
+  "order": 3,
+  "className": "",
+  "visible": "true",
+  "disabled": "false"
+ },
+ {
+  "id": "cplabg011",
+  "type": "ui-group",
+  "name": "Ligne CP Lab 400",
+  "page": "cplabp008",
+  "width": "12",
+  "height": "1",
+  "order": 1,
+  "showTitle": true,
+  "className": "",
+  "visible": "true",
+  "disabled": "false",
+  "groupType": "default"
+ },
+ {
+  "id": "cplabg012",
+  "type": "ui-group",
+  "name": "Ordre de fabrication (OF)",
+  "page": "cplabp008",
+  "width": "6",
+  "height": "1",
+  "order": 2,
+  "showTitle": true,
+  "className": "",
+  "visible": "true",
+  "disabled": "false",
+  "groupType": "default"
+ },
+ {
+  "id": "cplabg013",
+  "type": "ui-group",
+  "name": "Andon",
+  "page": "cplabp008",
+  "width": "6",
+  "height": "1",
+  "order": 3,
+  "showTitle": true,
+  "className": "",
+  "visible": "true",
+  "disabled": "false",
+  "groupType": "default"
+ },
+ {
+  "id": "cplabg014",
+  "type": "ui-group",
+  "name": "Machines",
+  "page": "cplabp009",
+  "width": "12",
+  "height": "1",
+  "order": 1,
+  "showTitle": true,
+  "className": "",
+  "visible": "true",
+  "disabled": "false",
+  "groupType": "default"
+ },
+ {
+  "id": "cplabg015",
+  "type": "ui-group",
+  "name": "Plan de maintenance",
+  "page": "cplabp009",
+  "width": "6",
+  "height": "1",
+  "order": 2,
+  "showTitle": true,
+  "className": "",
+  "visible": "true",
+  "disabled": "false",
+  "groupType": "default"
+ },
+ {
+  "id": "cplabg016",
+  "type": "ui-group",
+  "name": "Journal des evenements",
+  "page": "cplabp009",
+  "width": "6",
+  "height": "1",
+  "order": 3,
+  "showTitle": true,
+  "className": "",
+  "visible": "true",
+  "disabled": "false",
+  "groupType": "default"
+ },
+ {
+  "id": "cplabg017",
+  "type": "ui-group",
+  "name": "Tab5 connectees",
+  "page": "cplabp010",
+  "width": "8",
+  "height": "1",
+  "order": 1,
+  "showTitle": true,
+  "className": "",
+  "visible": "true",
+  "disabled": "false",
+  "groupType": "default"
+ },
+ {
+  "id": "cplabg018",
+  "type": "ui-group",
+  "name": "Messages et actions",
+  "page": "cplabp010",
+  "width": "4",
+  "height": "1",
+  "order": 2,
+  "showTitle": true,
+  "className": "",
+  "visible": "true",
+  "disabled": "false",
+  "groupType": "default"
+ },
+ {
+  "id": "cplabc019",
+  "type": "comment",
+  "z": "cplabt001",
+  "name": "Production model",
+  "info": "Aggregates cplab/prod/# into global.prod and feeds the dashboard.",
+  "x": 160,
+  "y": 40,
+  "wires": []
+ },
+ {
+  "id": "cplabo021",
+  "type": "mqtt out",
+  "z": "cplabt001",
+  "name": "MQTT out",
+  "topic": "",
+  "qos": "1",
+  "retain": "",
+  "respTopic": "",
+  "contentType": "",
+  "userProps": "",
+  "correl": "",
+  "expiry": "",
+  "broker": "cplabb005",
+  "x": 900,
+  "y": 220,
+  "wires": []
+ },
+ {
+  "id": "cplabw022",
+  "type": "ui-template",
+  "z": "cplabt001",
+  "group": "cplabg011",
+  "page": "",
+  "ui": "",
+  "name": "Synoptique ligne",
+  "order": 1,
+  "width": "0",
+  "height": "0",
+  "head": "",
+  "format": "<template>\n  <div class=\"cp\" v-if=\"msg && msg.payload\">\n    <div class=\"line\">\n      <template v-for=\"(s, i) in msg.payload.stations\" :key=\"s.id\">\n        <div class=\"st\" :class=\"['k-' + (s.kanban || 'UNKNOWN'), s.state === 'RUN' ? 'run' : 'wait']\">\n          <div class=\"nm\">Poste {{ i + 1 }} <span>{{ s.name || '' }}</span></div>\n          <div class=\"ct\">{{ s.count ?? '--' }}</div>\n          <div class=\"sm\">{{ s.cadence ?? 0 }} pcs/min &nbsp; cycle {{ s.cycle_ms ? (s.cycle_ms / 1000).toFixed(1) + ' s' : '--' }}</div>\n        </div>\n        <div v-if=\"i < 3\" class=\"buf\" :class=\"'b-' + msg.payload.buffers[i].level\">\n          <b>{{ msg.payload.buffers[i].wip ?? '?' }}</b><small>WIP / {{ msg.payload.wipMax }}</small>\n        </div>\n      </template>\n    </div>\n    <div class=\"row\">\n      <div class=\"col\">\n        <h4>Avancement OF {{ msg.payload.order.of || '' }}</h4>\n        <div v-for=\"c in msg.payload.colors\" :key=\"c.c\" class=\"bar\">\n          <span class=\"sw\" :class=\"'c-' + c.c\"></span><span class=\"lb\">{{ c.c }}</span>\n          <div class=\"trk\"><div class=\"fill\" :class=\"'c-' + c.c\" :style=\"{ width: (c.target ? Math.min(100, 100 * c.n / c.target) : 0) + '%' }\"></div></div>\n          <span class=\"vl\">{{ c.n }}<template v-if=\"c.target\"> / {{ c.target }}</template></span>\n        </div>\n        <div v-if=\"msg.payload.unknown\" class=\"unk\">Couleur inconnue: {{ msg.payload.unknown }}</div>\n      </div>\n      <div class=\"col kpi\">\n        <h4>Indicateurs</h4>\n        <p>Takt: <b>{{ msg.payload.order.takt_s ?? '--' }} s</b></p>\n        <p v-if=\"msg.payload.bottleneck\">Goulot: <b>{{ msg.payload.bottleneck.id }}</b> ({{ (msg.payload.bottleneck.cycle_ms / 1000).toFixed(1) }} s)</p>\n        <p v-if=\"msg.payload.lastColor\">Derniere piece: <b>{{ msg.payload.lastColor.color }}</b></p>\n      </div>\n    </div>\n  </div>\n  <div v-else class=\"cp empty\">En attente des donnees MQTT (topics cplab/prod/#)...</div>\n</template>\n<style>\n.cp { font-family: Barlow, Roboto, sans-serif; color: #16212b; }\n.cp .line { display: flex; align-items: center; gap: 0; background: linear-gradient(#e6e9ec, #e6e9ec) center/100% 10px no-repeat; }\n.cp .st { flex: 1; background: #fff; border: 1px solid #c4cad0; border-top: 8px solid #8c969f; border-radius: 6px; padding: 10px 12px; min-width: 0; }\n.cp .st.run { border-top-color: #1f9d55; } .cp .st.wait { border-top-color: #e8a317; }\n.cp .nm { font-weight: 700; } .cp .nm span { font-weight: 400; color: #606c76; }\n.cp .ct { font-size: 44px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }\n.cp .sm { font-size: 13px; color: #606c76; }\n.cp .buf { width: 74px; height: 74px; margin: 0 10px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; background: #8c969f; flex: none; }\n.cp .buf b { font-size: 24px; line-height: 1; } .cp .buf small { font-size: 10px; }\n.cp .b-ok { background: #1f9d55; } .cp .b-limit, .cp .b-error { background: #e8a317; } .cp .b-over { background: #cf3b3b; }\n.cp .row { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; } .cp .col { flex: 1; min-width: 260px; }\n.cp h4 { margin: 0 0 8px; font-size: 15px; color: #606c76; font-weight: 600; }\n.cp .bar { display: flex; align-items: center; gap: 8px; margin: 6px 0; }\n.cp .sw { width: 16px; height: 16px; border-radius: 3px; } .cp .lb { width: 60px; font-size: 13px; }\n.cp .trk { flex: 1; height: 12px; background: #e6e9ec; border-radius: 3px; overflow: hidden; } .cp .fill { height: 100%; }\n.cp .vl { width: 70px; text-align: right; font-variant-numeric: tabular-nums; }\n.cp .c-RED { background: #cf3b3b; } .cp .c-GREEN { background: #1f9d55; } .cp .c-BLUE { background: #0a8ad0; } .cp .c-BLACK { background: #16212b; }\n.cp .unk { color: #cf3b3b; font-size: 13px; } .cp .kpi p { margin: 4px 0; }\n.cp.empty { color: #606c76; padding: 20px; }\n</style>",
+  "storeOutMessages": true,
+  "passthru": false,
+  "resendOnRefresh": true,
+  "templateScope": "local",
+  "className": "",
+  "x": 690,
+  "y": 100,
+  "wires": [
+   []
+  ]
+ },
+ {
+  "id": "cplabw023",
+  "type": "ui-template",
+  "z": "cplabt001",
+  "group": "cplabg013",
+  "page": "",
+  "ui": "",
+  "name": "Andon",
+  "order": 1,
+  "width": "0",
+  "height": "0",
+  "head": "",
+  "format": "<template>\n  <div class=\"an\">\n    <div v-if=\"!msg || !msg.payload || !msg.payload.andon.length\" class=\"none\">Aucun appel Andon.</div>\n    <div v-else v-for=\"a in msg.payload.andon\" :key=\"a.ts\" class=\"it\" :class=\"a.type\">\n      <b>{{ a.type === 'quality' ? 'Alerte qualite' : 'Appel superviseur' }}</b>\n      <span>{{ a.from }} - {{ new Date(a.ts).toLocaleTimeString() }}</span>\n    </div>\n  </div>\n</template>\n<style>\n.an .it { padding: 6px 10px; margin-bottom: 6px; border-left: 6px solid #e8a317; background: #fdf6e6; display: flex; justify-content: space-between; }\n.an .it.quality { border-left-color: #cf3b3b; background: #fbeaea; } .an .none { color: #606c76; }\n</style>",
+  "storeOutMessages": true,
+  "passthru": false,
+  "resendOnRefresh": true,
+  "templateScope": "local",
+  "className": "",
+  "x": 660,
+  "y": 160,
+  "wires": [
+   []
+  ]
+ },
+ {
+  "id": "cplabf024",
+  "type": "function",
+  "z": "cplabt001",
+  "name": "Production model",
+  "func": "\n// Production model: stations st1..st4, colour counts, OF, andon\nconst prod = global.get('prod') || { stations: {}, color: {}, order: {}, andon: [] };\nconst t = msg.topic.split('/');            // cplab/prod/<x>/<y>\nconst now = Date.now();\nif (t[2] === 'color' && t[3] === 'count') prod.color = msg.payload;\nelse if (t[2] === 'color' && t[3] === 'last') prod.lastColor = Object.assign({ ts: now }, msg.payload);\nelse if (t[2] === 'order') prod.order = msg.payload || {};\nelse if (t[2] === 'andon') {\n  prod.andon.unshift(Object.assign({ ts: now }, msg.payload));\n  prod.andon = prod.andon.slice(0, 20);\n  node.warn(`ANDON ${msg.payload.type} from ${msg.payload.from}`);\n}\nelse if (/^st[1-4]$/.test(t[2]) && t[3] === 'count') prod.stations[t[2]] = Object.assign({}, msg.payload, { seen: now });\nglobal.set('prod', prod);\n\nconst keys = ['st1', 'st2', 'st3', 'st4'];\nconst wipMax = (prod.order && prod.order.wip_max) || 3;\nconst buffers = [];\nfor (let i = 0; i < 3; i++) {\n  const a = prod.stations[keys[i]], b = prod.stations[keys[i + 1]];\n  const wip = (a && b) ? a.count - b.count : null;\n  const level = wip === null ? 'unknown' : wip < 0 ? 'error' : wip > wipMax ? 'over' : wip === wipMax ? 'limit' : 'ok';\n  buffers.push({ from: keys[i], to: keys[i + 1], wip, level });\n}\nconst colors = ['RED', 'GREEN', 'BLUE', 'BLACK'].map(c => ({\n  c, n: (prod.color && prod.color[c]) || 0, target: (prod.order && prod.order.qty && prod.order.qty[c]) || 0\n}));\nlet bottleneck = null;\nkeys.forEach(k => { const s = prod.stations[k]; if (s && s.cycle_ms && (!bottleneck || s.cycle_ms > bottleneck.cycle_ms)) bottleneck = { id: k, cycle_ms: s.cycle_ms }; });\nreturn { payload: {\n  stations: keys.map(k => prod.stations[k] || { id: k }),\n  buffers, colors, unknown: (prod.color && prod.color.UNKNOWN) || 0,\n  order: prod.order, wipMax, bottleneck, andon: prod.andon.slice(0, 8), lastColor: prod.lastColor || null\n}};\n",
+  "outputs": 1,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 440,
+  "y": 120,
+  "wires": [
+   [
+    "cplabw022",
+    "cplabw023"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi025",
+  "type": "mqtt in",
+  "z": "cplabt001",
+  "name": "cplab/prod/+/count",
+  "topic": "cplab/prod/+/count",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 170,
+  "y": 80,
+  "wires": [
+   [
+    "cplabf024"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi026",
+  "type": "mqtt in",
+  "z": "cplabt001",
+  "name": "cplab/prod/color/+",
+  "topic": "cplab/prod/color/+",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 170,
+  "y": 120,
+  "wires": [
+   [
+    "cplabf024"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi027",
+  "type": "mqtt in",
+  "z": "cplabt001",
+  "name": "cplab/prod/order",
+  "topic": "cplab/prod/order",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 160,
+  "y": 160,
+  "wires": [
+   [
+    "cplabf024"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi028",
+  "type": "mqtt in",
+  "z": "cplabt001",
+  "name": "cplab/prod/andon",
+  "topic": "cplab/prod/andon",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 160,
+  "y": 200,
+  "wires": [
+   [
+    "cplabf024"
+   ]
+  ]
+ },
+ {
+  "id": "cplabf020",
+  "type": "function",
+  "z": "cplabt001",
+  "name": "Dashboard -> MQTT",
+  "func": "\n// Converts dashboard requests into MQTT messages (same protocol as the web site)\nconst p = msg.payload || {};\nconst out = { qos: 1 };\nswitch (msg.topic) {\n  case 'cmd':      // {target, kind:'msg'|'action', ...}\n    out.topic = `cplab/cmd/${p.target || 'all'}/${p.kind === 'action' ? 'action' : 'msg'}`;\n    out.payload = p.kind === 'action'\n      ? Object.assign({}, p.data || {}, { cmd: p.cmd })\n      : { text: p.text || '', from: p.from || 'Node-RED', level: p.level || 'info', duration: Number(p.duration) || 15 };\n    out.retain = false; break;\n  case 'order':    // OF -> retained so every Tab5 gets it at (re)connection\n    out.topic = 'cplab/prod/order'; out.payload = p; out.retain = true; break;\n  case 'plan':     // {id:'m1', plan:{prev:{date,task}, cur:{date,task}}}\n    out.topic = `cplab/maint/${p.id}/plan/set`; out.payload = p.plan; out.retain = false; break;\n  case 'ack':\n    out.topic = `cplab/maint/${p.id}/ack`; out.payload = { id: p.id, by: 'superviseur' }; out.retain = false; break;\n  default: return null;\n}\nnode.status({ fill: 'blue', shape: 'dot', text: out.topic });\nreturn out;\n",
+  "outputs": 1,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 690,
+  "y": 220,
+  "wires": [
+   [
+    "cplabo021"
+   ]
+  ]
+ },
+ {
+  "id": "cplabw029",
+  "type": "ui-template",
+  "z": "cplabt001",
+  "group": "cplabg012",
+  "page": "",
+  "ui": "",
+  "name": "Formulaire OF",
+  "order": 1,
+  "width": "0",
+  "height": "0",
+  "head": "",
+  "format": "<template>\n  <div class=\"of\">\n    <label>Numero OF <input v-model=\"of\" /></label>\n    <div class=\"q\">\n      <label v-for=\"c in cols\" :key=\"c\">{{ c }} <input type=\"number\" min=\"0\" v-model.number=\"qty[c]\" /></label>\n    </div>\n    <label>Takt (s) <input type=\"number\" min=\"1\" v-model.number=\"takt\" /></label>\n    <label>WIP max par buffer <input type=\"number\" min=\"1\" max=\"8\" v-model.number=\"wip\" /></label>\n    <div class=\"btns\">\n      <button @click=\"sendOrder\">Lancer l'OF</button>\n      <button class=\"sec\" @click=\"resetLine\">Remettre les compteurs a zero</button>\n    </div>\n  </div>\n</template>\n<script>\nexport default {\n  data() { return { of: 'OF-001', cols: ['RED', 'GREEN', 'BLUE', 'BLACK'], qty: { RED: 5, GREEN: 5, BLUE: 5, BLACK: 5 }, takt: 20, wip: 3 } },\n  methods: {\n    sendOrder() { this.send({ topic: 'order', payload: { of: this.of, qty: { ...this.qty }, takt_s: this.takt, wip_max: this.wip, ts: Date.now() } }) },\n    resetLine() { if (confirm('Remettre a zero tous les compteurs de production ?')) this.send({ topic: 'cmd', payload: { target: 'prod', kind: 'action', cmd: 'reset' } }) }\n  }\n}\n</script>\n<style>\n.of { display: grid; gap: 8px; font-family: Barlow, Roboto, sans-serif; }\n.of label { display: flex; justify-content: space-between; align-items: center; gap: 8px; }\n.of input { width: 110px; padding: 4px 6px; border: 1px solid #c4cad0; border-radius: 4px; }\n.of .q { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }\n.of .btns { display: flex; gap: 8px; flex-wrap: wrap; }\n.of button { background: #0a8ad0; color: #fff; border: 0; border-radius: 4px; padding: 8px 14px; cursor: pointer; }\n.of button.sec { background: #606c76; }\n</style>",
+  "storeOutMessages": true,
+  "passthru": false,
+  "resendOnRefresh": true,
+  "templateScope": "local",
+  "className": "",
+  "x": 450,
+  "y": 220,
+  "wires": [
+   [
+    "cplabf020"
+   ]
+  ]
+ },
+ {
+  "id": "cplabc030",
+  "type": "comment",
+  "z": "cplabt002",
+  "name": "Maintenance model",
+  "info": "Breakdown = transition to ABNORMAL. History kept 30 days in global.maint. Configure contextStorage (localfilesystem) in settings.js to survive restarts. Stats are re-published retained on cplab/maint/mN/stats.",
+  "x": 170,
+  "y": 40,
+  "wires": []
+ },
+ {
+  "id": "cplabo031",
+  "type": "mqtt out",
+  "z": "cplabt002",
+  "name": "stats (retained)",
+  "topic": "",
+  "qos": "1",
+  "retain": "",
+  "respTopic": "",
+  "contentType": "",
+  "userProps": "",
+  "correl": "",
+  "expiry": "",
+  "broker": "cplabb005",
+  "x": 900,
+  "y": 100,
+  "wires": []
+ },
+ {
+  "id": "cplabo032",
+  "type": "mqtt out",
+  "z": "cplabt002",
+  "name": "MQTT out",
+  "topic": "",
+  "qos": "1",
+  "retain": "",
+  "respTopic": "",
+  "contentType": "",
+  "userProps": "",
+  "correl": "",
+  "expiry": "",
+  "broker": "cplabb005",
+  "x": 900,
+  "y": 300,
+  "wires": []
+ },
+ {
+  "id": "cplabw033",
+  "type": "ui-template",
+  "z": "cplabt002",
+  "group": "cplabg014",
+  "page": "",
+  "ui": "",
+  "name": "Cartes machines",
+  "order": 1,
+  "width": "0",
+  "height": "0",
+  "head": "",
+  "format": "<template>\n  <div class=\"mm\" v-if=\"msg && msg.payload\">\n    <div v-for=\"m in msg.payload.machines\" :key=\"m.id\" class=\"card\" :class=\"'s-' + (m.state || 'NONE')\">\n      <div class=\"hd\"><b>{{ m.id.toUpperCase() }}</b> {{ m.name || '' }}</div>\n      <div class=\"st\">{{ ({RUN:'En marche', OFF:'Arret', ABNORMAL:'Anomalie'})[m.state] || 'Pas de donnees' }}</div>\n      <div class=\"rs\">{{ m.reason }} <span v-if=\"m.sim\">(simulation)</span></div>\n      <div class=\"nums\">\n        <div><b>{{ m.stats.day }}</b><small>pannes 24 h</small></div>\n        <div><b>{{ m.stats.week }}</b><small>pannes 7 j</small></div>\n        <div><b>{{ m.stats.mttr_min ?? '--' }}</b><small>MTTR min</small></div>\n      </div>\n      <div class=\"pl\"><small>Preventive</small> {{ m.stats.next_prev ? m.stats.next_prev.date + ' - ' + m.stats.next_prev.task : 'non planifiee' }}</div>\n      <div class=\"pl\"><small>Curative</small> {{ m.stats.next_cur ? m.stats.next_cur.date + ' - ' + m.stats.next_cur.task : 'aucune' }}</div>\n      <div class=\"act\">\n        <button @click=\"act(m.id,'ack')\">Acquitter</button>\n        <button class=\"sec\" @click=\"cmd(m.id,'sim_fault')\">Simuler panne</button>\n        <button class=\"sec\" @click=\"cmd(m.id,'learn')\">Apprendre</button>\n      </div>\n    </div>\n  </div>\n  <div v-else class=\"empty\">En attente des donnees MQTT (topics cplab/maint/#)...</div>\n</template>\n<script>\nexport default {\n  methods: {\n    act(id, kind) { this.send({ topic: 'ack', payload: { id } }) },\n    cmd(id, c) { this.send({ topic: 'cmd', payload: { target: 'maint-' + id, kind: 'action', cmd: c } }) }\n  }\n}\n</script>\n<style>\n.mm { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; font-family: Barlow, Roboto, sans-serif; }\n.mm .card { border: 1px solid #c4cad0; border-top: 10px solid #8c969f; border-radius: 6px; padding: 10px; background: #fff; }\n.mm .s-RUN { border-top-color: #1f9d55; } .mm .s-ABNORMAL { border-top-color: #cf3b3b; background: #fdf3f3; }\n.mm .st { font-size: 24px; font-weight: 700; } .mm .rs { color: #cf3b3b; min-height: 18px; font-size: 13px; }\n.mm .nums { display: flex; justify-content: space-between; margin: 8px 0; text-align: center; }\n.mm .nums b { display: block; font-size: 26px; } .mm .nums small, .mm .pl small { color: #606c76; }\n.mm .pl { font-size: 13px; margin: 2px 0; } .mm .act { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }\n.mm button { background: #0a8ad0; color: #fff; border: 0; border-radius: 4px; padding: 6px 10px; cursor: pointer; } .mm button.sec { background: #606c76; }\n.empty { color: #606c76; padding: 20px; }\n</style>",
+  "storeOutMessages": true,
+  "passthru": false,
+  "resendOnRefresh": true,
+  "templateScope": "local",
+  "className": "",
+  "x": 680,
+  "y": 160,
+  "wires": [
+   [
+    "cplabf040"
+   ]
+  ]
+ },
+ {
+  "id": "cplabw034",
+  "type": "ui-template",
+  "z": "cplabt002",
+  "group": "cplabg016",
+  "page": "",
+  "ui": "",
+  "name": "Journal",
+  "order": 1,
+  "width": "0",
+  "height": "0",
+  "head": "",
+  "format": "<template>\n  <div class=\"ev\">\n    <div v-if=\"!msg || !msg.payload || !msg.payload.events.length\" class=\"none\">Aucun evenement.</div>\n    <div v-else v-for=\"(e, i) in msg.payload.events\" :key=\"i\" class=\"it\" :class=\"'to-' + e.to\">\n      <span class=\"tm\">{{ new Date(e.ts).toLocaleString() }}</span> <b>{{ e.id.toUpperCase() }}</b>\n      {{ e.from || '-' }} &rarr; {{ e.to }} <i>{{ e.reason }}</i> <span v-if=\"e.sim\">(sim)</span>\n    </div>\n  </div>\n</template>\n<style>\n.ev { max-height: 340px; overflow: auto; font-size: 13px; font-family: Barlow, Roboto, sans-serif; }\n.ev .it { padding: 4px 6px; border-bottom: 1px solid #e6e9ec; } .ev .to-ABNORMAL { background: #fbeaea; } .ev .to-ACK { color: #0a8ad0; }\n.ev .tm { color: #606c76; } .ev .none { color: #606c76; }\n</style>",
+  "storeOutMessages": true,
+  "passthru": false,
+  "resendOnRefresh": true,
+  "templateScope": "local",
+  "className": "",
+  "x": 660,
+  "y": 200,
+  "wires": [
+   []
+  ]
+ },
+ {
+  "id": "cplabf035",
+  "type": "function",
+  "z": "cplabt002",
+  "name": "Maintenance model",
+  "func": "\n// Maintenance model: machine states, breakdown history, plans -> stats\nconst M = global.get('maint') || { machines: {}, history: {}, plans: {}, events: [] };\nconst now = Date.now(), DAY = 864e5;\nconst IDS = ['m1', 'm2', 'm3', 'm4'];\nconst changed = new Set();\nconst t = (msg.topic || '').split('/');                  // cplab/maint/m1/state\n\nfunction stats(id) {\n  const h = (M.history[id] || []);\n  const day = h.filter(e => now - e.start < DAY).length;\n  const week = h.filter(e => now - e.start < 7 * DAY).length;\n  const closed = h.filter(e => e.end && now - e.start < 7 * DAY);\n  const mttr = closed.length ? closed.reduce((s, e) => s + (e.end - e.start), 0) / closed.length / 60000 : null;\n  const p = M.plans[id] || {};\n  return { id, day, week,\n    mttr_min: mttr === null ? null : Math.round(mttr * 10) / 10,\n    mtbf_h: week ? Math.round(168 / week * 10) / 10 : null,\n    next_prev: p.prev || null, next_cur: p.cur || null, ts: now };\n}\n\nif (msg.topic === 'tick') IDS.forEach(id => changed.add(id));\nelse if (t[3] === 'state') {\n  const id = t[2], st = msg.payload.state, prev = M.machines[id];\n  if (!prev || prev.state !== st) {\n    M.events.unshift({ ts: now, id, from: prev ? prev.state : null, to: st, reason: msg.payload.reason || '', sim: !!msg.payload.sim });\n    M.events = M.events.slice(0, 100);\n    M.history[id] = M.history[id] || [];\n    if (prev && prev.state === 'ABNORMAL') { const last = M.history[id][M.history[id].length - 1]; if (last && !last.end) last.end = now; }\n    if (st === 'ABNORMAL') M.history[id].push({ start: now, reason: msg.payload.reason || '', sim: !!msg.payload.sim });\n    M.history[id] = M.history[id].filter(e => now - e.start < 30 * DAY);\n    changed.add(id);\n  }\n  M.machines[id] = Object.assign({}, msg.payload, { seen: now });\n}\nelse if (t[3] === 'plan') { M.plans[t[2]] = Object.assign(M.plans[t[2]] || {}, msg.payload); changed.add(t[2]); }\nelse if (t[3] === 'ack') { M.events.unshift({ ts: now, id: t[2], to: 'ACK', reason: (msg.payload && msg.payload.by) || '' }); }\nglobal.set('maint', M);\n\nconst statMsgs = [...changed].map(id => ({ topic: `cplab/maint/${id}/stats`, payload: stats(id), retain: true, qos: 1 }));\nconst dash = { payload: {\n  machines: IDS.map(id => Object.assign({ id }, M.machines[id] || {}, { stats: stats(id), plan: M.plans[id] || {} })),\n  events: M.events.slice(0, 30) } };\nreturn [statMsgs, dash];\n",
+  "outputs": 2,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 440,
+  "y": 140,
+  "wires": [
+   [
+    "cplabo031"
+   ],
+   [
+    "cplabw033",
+    "cplabw034"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi036",
+  "type": "mqtt in",
+  "z": "cplabt002",
+  "name": "cplab/maint/+/state",
+  "topic": "cplab/maint/+/state",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 170,
+  "y": 80,
+  "wires": [
+   [
+    "cplabf035"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi037",
+  "type": "mqtt in",
+  "z": "cplabt002",
+  "name": "cplab/maint/+/plan/set",
+  "topic": "cplab/maint/+/plan/set",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 180,
+  "y": 120,
+  "wires": [
+   [
+    "cplabf035"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi038",
+  "type": "mqtt in",
+  "z": "cplabt002",
+  "name": "cplab/maint/+/ack",
+  "topic": "cplab/maint/+/ack",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 160,
+  "y": 160,
+  "wires": [
+   [
+    "cplabf035"
+   ]
+  ]
+ },
+ {
+  "id": "cplabj039",
+  "type": "inject",
+  "z": "cplabt002",
+  "name": "tick 60 s",
+  "props": [
+   {
+    "p": "payload"
+   },
+   {
+    "p": "topic",
+    "vt": "str"
+   }
+  ],
+  "repeat": "60",
+  "crontab": "",
+  "once": true,
+  "onceDelay": "2",
+  "topic": "tick",
+  "payload": "",
+  "payloadType": "date",
+  "x": 150,
+  "y": 200,
+  "wires": [
+   [
+    "cplabf035"
+   ]
+  ]
+ },
+ {
+  "id": "cplabf040",
+  "type": "function",
+  "z": "cplabt002",
+  "name": "Dashboard -> MQTT",
+  "func": "\n// Converts dashboard requests into MQTT messages (same protocol as the web site)\nconst p = msg.payload || {};\nconst out = { qos: 1 };\nswitch (msg.topic) {\n  case 'cmd':      // {target, kind:'msg'|'action', ...}\n    out.topic = `cplab/cmd/${p.target || 'all'}/${p.kind === 'action' ? 'action' : 'msg'}`;\n    out.payload = p.kind === 'action'\n      ? Object.assign({}, p.data || {}, { cmd: p.cmd })\n      : { text: p.text || '', from: p.from || 'Node-RED', level: p.level || 'info', duration: Number(p.duration) || 15 };\n    out.retain = false; break;\n  case 'order':    // OF -> retained so every Tab5 gets it at (re)connection\n    out.topic = 'cplab/prod/order'; out.payload = p; out.retain = true; break;\n  case 'plan':     // {id:'m1', plan:{prev:{date,task}, cur:{date,task}}}\n    out.topic = `cplab/maint/${p.id}/plan/set`; out.payload = p.plan; out.retain = false; break;\n  case 'ack':\n    out.topic = `cplab/maint/${p.id}/ack`; out.payload = { id: p.id, by: 'superviseur' }; out.retain = false; break;\n  default: return null;\n}\nnode.status({ fill: 'blue', shape: 'dot', text: out.topic });\nreturn out;\n",
+  "outputs": 1,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 690,
+  "y": 300,
+  "wires": [
+   [
+    "cplabo032"
+   ]
+  ]
+ },
+ {
+  "id": "cplabw042",
+  "type": "ui-template",
+  "z": "cplabt002",
+  "group": "cplabg015",
+  "page": "",
+  "ui": "",
+  "name": "Formulaire plan",
+  "order": 1,
+  "width": "0",
+  "height": "0",
+  "head": "",
+  "format": "<template>\n  <div class=\"pf\">\n    <label>Machine <select v-model=\"id\"><option v-for=\"m in ['m1','m2','m3','m4']\" :key=\"m\" :value=\"m\">{{ m.toUpperCase() }}</option></select></label>\n    <fieldset><legend>Prochaine action preventive</legend>\n      <input type=\"date\" v-model=\"pd\" /> <input v-model=\"pt\" placeholder=\"Tache (ex: graissage convoyeur)\" /></fieldset>\n    <fieldset><legend>Prochaine action curative</legend>\n      <input type=\"date\" v-model=\"cd\" /> <input v-model=\"ct\" placeholder=\"Tache (ex: changer courroie)\" /></fieldset>\n    <button @click=\"save\">Enregistrer le plan</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() { return { id: 'm1', pd: '', pt: '', cd: '', ct: '' } },\n  methods: { save() {\n    const plan = {};\n    plan.prev = this.pd || this.pt ? { date: this.pd, task: this.pt } : null;\n    plan.cur = this.cd || this.ct ? { date: this.cd, task: this.ct } : null;\n    this.send({ topic: 'plan', payload: { id: this.id, plan } });\n  } }\n}\n</script>\n<style>\n.pf { display: grid; gap: 8px; font-family: Barlow, Roboto, sans-serif; }\n.pf fieldset { border: 1px solid #c4cad0; border-radius: 4px; display: flex; gap: 6px; flex-wrap: wrap; }\n.pf input, .pf select { padding: 4px 6px; border: 1px solid #c4cad0; border-radius: 4px; }\n.pf button { background: #0a8ad0; color: #fff; border: 0; border-radius: 4px; padding: 8px 14px; cursor: pointer; justify-self: start; }\n</style>",
+  "storeOutMessages": true,
+  "passthru": false,
+  "resendOnRefresh": true,
+  "templateScope": "local",
+  "className": "",
+  "x": 450,
+  "y": 300,
+  "wires": [
+   [
+    "cplabf040"
+   ]
+  ]
+ },
+ {
+  "id": "cplabc043",
+  "type": "comment",
+  "z": "cplabt003",
+  "name": "Device registry + messaging",
+  "info": "cplab/status/+ (LWT online/offline) and cplab/hb/+ (heartbeat). Messages: cplab/cmd/<devId|prod|maint|all>/msg",
+  "x": 200,
+  "y": 40,
+  "wires": []
+ },
+ {
+  "id": "cplabo044",
+  "type": "mqtt out",
+  "z": "cplabt003",
+  "name": "MQTT out",
+  "topic": "",
+  "qos": "1",
+  "retain": "",
+  "respTopic": "",
+  "contentType": "",
+  "userProps": "",
+  "correl": "",
+  "expiry": "",
+  "broker": "cplabb005",
+  "x": 900,
+  "y": 200,
+  "wires": []
+ },
+ {
+  "id": "cplabf045",
+  "type": "function",
+  "z": "cplabt003",
+  "name": "Dashboard -> MQTT",
+  "func": "\n// Converts dashboard requests into MQTT messages (same protocol as the web site)\nconst p = msg.payload || {};\nconst out = { qos: 1 };\nswitch (msg.topic) {\n  case 'cmd':      // {target, kind:'msg'|'action', ...}\n    out.topic = `cplab/cmd/${p.target || 'all'}/${p.kind === 'action' ? 'action' : 'msg'}`;\n    out.payload = p.kind === 'action'\n      ? Object.assign({}, p.data || {}, { cmd: p.cmd })\n      : { text: p.text || '', from: p.from || 'Node-RED', level: p.level || 'info', duration: Number(p.duration) || 15 };\n    out.retain = false; break;\n  case 'order':    // OF -> retained so every Tab5 gets it at (re)connection\n    out.topic = 'cplab/prod/order'; out.payload = p; out.retain = true; break;\n  case 'plan':     // {id:'m1', plan:{prev:{date,task}, cur:{date,task}}}\n    out.topic = `cplab/maint/${p.id}/plan/set`; out.payload = p.plan; out.retain = false; break;\n  case 'ack':\n    out.topic = `cplab/maint/${p.id}/ack`; out.payload = { id: p.id, by: 'superviseur' }; out.retain = false; break;\n  default: return null;\n}\nnode.status({ fill: 'blue', shape: 'dot', text: out.topic });\nreturn out;\n",
+  "outputs": 1,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 690,
+  "y": 200,
+  "wires": [
+   [
+    "cplabo044"
+   ]
+  ]
+ },
+ {
+  "id": "cplabw046",
+  "type": "ui-template",
+  "z": "cplabt003",
+  "group": "cplabg017",
+  "page": "",
+  "ui": "",
+  "name": "Tableau Tab5",
+  "order": 1,
+  "width": "0",
+  "height": "0",
+  "head": "",
+  "format": "<template>\n  <table class=\"dv\" v-if=\"msg && msg.payload && msg.payload.length\">\n    <thead><tr><th>Tab5</th><th>Etat</th><th>IP</th><th>RSSI</th><th>Uptime</th><th>FW</th><th>Dernier accuse</th><th></th></tr></thead>\n    <tbody>\n      <tr v-for=\"d in msg.payload\" :key=\"d.id\" :class=\"{ off: !d.online }\">\n        <td><b>{{ d.id }}</b><br><small>{{ d.title }}</small></td>\n        <td><span class=\"dot\" :class=\"d.online ? (d.stale ? 'st' : 'on') : 'of'\"></span>{{ d.online ? (d.stale ? 'muet' : 'en ligne') : 'hors ligne' }}</td>\n        <td>{{ d.ip || '-' }}</td><td>{{ d.rssi ?? '-' }}</td>\n        <td>{{ d.up ? Math.floor(d.up / 60) + ' min' : '-' }}</td><td>{{ d.fw || '-' }}</td>\n        <td><small>{{ d.lastAck ? new Date(d.lastAck.ts).toLocaleTimeString() + ' ' + d.lastAck.text : '-' }}</small></td>\n        <td class=\"a\"><button @click=\"act(d.id,'identify')\">Identifier</button><button class=\"sec\" @click=\"reboot(d.id)\">Redemarrer</button></td>\n      </tr>\n    </tbody>\n  </table>\n  <div v-else class=\"none\">Aucune Tab5 vue sur cplab/status/+ pour l'instant.</div>\n</template>\n<script>\nexport default { methods: {\n  act(id, c) { this.send({ topic: 'cmd', payload: { target: id, kind: 'action', cmd: c } }) },\n  reboot(id) { if (confirm('Redemarrer ' + id + ' ?')) this.act(id, 'reboot') }\n} }\n</script>\n<style>\n.dv { width: 100%; border-collapse: collapse; font-size: 13px; font-family: Barlow, Roboto, sans-serif; }\n.dv th { text-align: left; color: #606c76; font-weight: 600; border-bottom: 1px solid #c4cad0; padding: 4px; }\n.dv td { padding: 4px; border-bottom: 1px solid #e6e9ec; vertical-align: top; } .dv tr.off { color: #8c969f; }\n.dv .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }\n.dv .on { background: #1f9d55; } .dv .st { background: #e8a317; } .dv .of { background: #cf3b3b; }\n.dv button { background: #0a8ad0; color: #fff; border: 0; border-radius: 4px; padding: 3px 8px; margin: 1px; cursor: pointer; } .dv button.sec { background: #606c76; }\n.none { color: #606c76; }\n</style>",
+  "storeOutMessages": true,
+  "passthru": false,
+  "resendOnRefresh": true,
+  "templateScope": "local",
+  "className": "",
+  "x": 680,
+  "y": 100,
+  "wires": [
+   [
+    "cplabf045"
+   ]
+  ]
+ },
+ {
+  "id": "cplabf047",
+  "type": "function",
+  "z": "cplabt003",
+  "name": "Device registry",
+  "func": "\n// Device registry from LWT + heartbeat\nconst D = global.get('devices') || {};\nconst t = msg.topic.split('/');               // cplab/status/<id> | cplab/hb/<id> | cplab/ack/<id>\nconst id = t[2], now = Date.now();\nD[id] = D[id] || { id };\nif (t[1] === 'status') D[id].online = String(msg.payload) === 'online';\nelse if (t[1] === 'hb') { Object.assign(D[id], msg.payload); D[id].online = true; D[id].seen = now; }\nelse if (t[1] === 'ack') { D[id].lastAck = { ts: now, text: msg.payload && msg.payload.text }; }\nglobal.set('devices', D);\nconst list = Object.values(D).sort((a, b) => a.id.localeCompare(b.id))\n  .map(d => Object.assign({}, d, { stale: d.seen ? (now - d.seen > 30000) : true }));\nreturn { payload: list };\n",
+  "outputs": 1,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 440,
+  "y": 100,
+  "wires": [
+   [
+    "cplabw046"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi048",
+  "type": "mqtt in",
+  "z": "cplabt003",
+  "name": "cplab/status/+",
+  "topic": "cplab/status/+",
+  "qos": "1",
+  "datatype": "utf8",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 160,
+  "y": 60,
+  "wires": [
+   [
+    "cplabf047"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi049",
+  "type": "mqtt in",
+  "z": "cplabt003",
+  "name": "cplab/hb/+",
+  "topic": "cplab/hb/+",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 150,
+  "y": 100,
+  "wires": [
+   [
+    "cplabf047"
+   ]
+  ]
+ },
+ {
+  "id": "cplabi050",
+  "type": "mqtt in",
+  "z": "cplabt003",
+  "name": "cplab/ack/+",
+  "topic": "cplab/ack/+",
+  "qos": "1",
+  "datatype": "json",
+  "broker": "cplabb005",
+  "nl": false,
+  "rap": true,
+  "rh": 0,
+  "inputs": 0,
+  "x": 150,
+  "y": 140,
+  "wires": [
+   [
+    "cplabf047"
+   ]
+  ]
+ },
+ {
+  "id": "cplabw051",
+  "type": "ui-template",
+  "z": "cplabt003",
+  "group": "cplabg018",
+  "page": "",
+  "ui": "",
+  "name": "Messages",
+  "order": 1,
+  "width": "0",
+  "height": "0",
+  "head": "",
+  "format": "<template>\n  <div class=\"ms\">\n    <label>Destinataire\n      <select v-model=\"target\">\n        <option value=\"all\">Toutes les Tab5</option><option value=\"prod\">Groupe production</option><option value=\"maint\">Groupe maintenance</option>\n        <option v-for=\"d in devs\" :key=\"d\" :value=\"d\">{{ d }}</option>\n      </select></label>\n    <label>Niveau\n      <select v-model=\"level\"><option value=\"info\">Information</option><option value=\"warn\">Attention</option><option value=\"alarm\">Alarme</option></select></label>\n    <label>Duree (s) <input type=\"number\" min=\"3\" max=\"600\" v-model.number=\"duration\" /></label>\n    <textarea v-model=\"text\" rows=\"3\" placeholder=\"Texte affiche sur la Tab5 (sans accents de preference)\"></textarea>\n    <button @click=\"sendMsg\" :disabled=\"!text\">Envoyer le message</button>\n  </div>\n</template>\n<script>\nexport default {\n  data() { return { target: 'all', level: 'info', duration: 15, text: '',\n    devs: ['prod-st1','prod-st2','prod-st3','prod-color','prod-hmi','maint-m1','maint-m2','maint-m3','maint-m4'] } },\n  methods: { sendMsg() {\n    this.send({ topic: 'cmd', payload: { target: this.target, kind: 'msg', text: this.text, level: this.level, duration: this.duration, from: 'Superviseur' } });\n    this.text = '';\n  } }\n}\n</script>\n<style>\n.ms { display: grid; gap: 8px; font-family: Barlow, Roboto, sans-serif; }\n.ms label { display: flex; justify-content: space-between; gap: 8px; align-items: center; }\n.ms select, .ms input, .ms textarea { padding: 4px 6px; border: 1px solid #c4cad0; border-radius: 4px; font: inherit; }\n.ms button { background: #0a8ad0; color: #fff; border: 0; border-radius: 4px; padding: 8px 14px; cursor: pointer; } .ms button:disabled { opacity: .5; }\n</style>",
+  "storeOutMessages": true,
+  "passthru": false,
+  "resendOnRefresh": true,
+  "templateScope": "local",
+  "className": "",
+  "x": 450,
+  "y": 200,
+  "wires": [
+   [
+    "cplabf045"
+   ]
+  ]
+ },
+ {
+  "id": "cplabc052",
+  "type": "comment",
+  "z": "cplabt004",
+  "name": "Simulator",
+  "info": "Click 'Start simulation' to publish fake data on the real topics (retained counts are overwritten!). Click 'Stop' then reset counts from the dashboard before running on the real line.",
+  "x": 200,
+  "y": 40,
+  "wires": []
+ },
+ {
+  "id": "cplabo053",
+  "type": "mqtt out",
+  "z": "cplabt004",
+  "name": "MQTT (simulated)",
+  "topic": "",
+  "qos": "1",
+  "retain": "",
+  "respTopic": "",
+  "contentType": "",
+  "userProps": "",
+  "correl": "",
+  "expiry": "",
+  "broker": "cplabb005",
+  "x": 720,
+  "y": 160,
+  "wires": []
+ },
+ {
+  "id": "cplabf054",
+  "type": "function",
+  "z": "cplabt004",
+  "name": "sim on/off",
+  "func": "\nflow.set('sim', msg.payload === true);\nnode.status({ fill: msg.payload ? 'green' : 'grey', shape: 'dot', text: msg.payload ? 'simulation ON' : 'simulation OFF' });\nreturn null;\n",
+  "outputs": 0,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 400,
+  "y": 100,
+  "wires": []
+ },
+ {
+  "id": "cplabj055",
+  "type": "inject",
+  "z": "cplabt004",
+  "name": "Start simulation",
+  "props": [
+   {
+    "p": "payload"
+   },
+   {
+    "p": "topic",
+    "vt": "str"
+   }
+  ],
+  "repeat": "",
+  "crontab": "",
+  "once": false,
+  "onceDelay": "2",
+  "topic": "",
+  "payload": "true",
+  "payloadType": "bool",
+  "x": 180,
+  "y": 80,
+  "wires": [
+   [
+    "cplabf054"
+   ]
+  ]
+ },
+ {
+  "id": "cplabj056",
+  "type": "inject",
+  "z": "cplabt004",
+  "name": "Stop simulation",
+  "props": [
+   {
+    "p": "payload"
+   },
+   {
+    "p": "topic",
+    "vt": "str"
+   }
+  ],
+  "repeat": "",
+  "crontab": "",
+  "once": false,
+  "onceDelay": "2",
+  "topic": "",
+  "payload": "false",
+  "payloadType": "bool",
+  "x": 180,
+  "y": 120,
+  "wires": [
+   [
+    "cplabf054"
+   ]
+  ]
+ },
+ {
+  "id": "cplabf057",
+  "type": "function",
+  "z": "cplabt004",
+  "name": "line simulator",
+  "func": "\n// Coherent line simulation: pieces flow st1 -> st4, st3 is the bottleneck\nif (!flow.get('sim')) return null;\nconst S = flow.get('simState') || { c: [0, 0, 0, 0], last: [0, 0, 0, 0], cyc: [0, 0, 0, 0], col: { RED: 0, GREEN: 0, BLUE: 0, BLACK: 0, UNKNOWN: 0 }, m: ['RUN', 'RUN', 'RUN', 'RUN'], mt: [0, 0, 0, 0], tick: 0 };\nconst now = Date.now(), wipMax = 3, out = [];\nconst p = [0.30, 0.35, 0.22, 0.45];           // chance per second to finish a piece\nconst names = ['Magasin', 'Presse', 'Controle', 'Controle couleur'];\nS.tick++;\nfor (let i = 3; i >= 0; i--) {\n  const upstreamOk = i === 0 ? (S.c[0] - S.c[1] <= wipMax) : (S.c[i - 1] > S.c[i]);\n  if (S.m[i] === 'RUN' && upstreamOk && Math.random() < p[i]) {\n    if (S.last[i]) S.cyc[i] = now - S.last[i];\n    S.last[i] = now; S.c[i]++;\n    if (i === 3) {\n      const r = Math.random(); const col = r < .27 ? 'RED' : r < .52 ? 'GREEN' : r < .77 ? 'BLUE' : r < .98 ? 'BLACK' : 'UNKNOWN';\n      S.col[col]++; out.push({ topic: 'cplab/prod/color/last', payload: { color: col, sim: true } });\n    }\n  }\n}\nfor (let i = 0; i < 4; i++) {\n  const wip = i < 3 ? S.c[i] - S.c[i + 1] : -1;\n  const kanban = i === 3 ? 'GREEN' : wip > wipMax ? 'RED' : wip === wipMax ? 'AMBER' : 'GREEN';\n  out.push({ topic: `cplab/prod/st${i + 1}/count`, retain: true, payload: { st: i + 1, id: 'st' + (i + 1), name: names[i], count: S.c[i],\n    cycle_ms: S.cyc[i], cadence: S.cyc[i] ? Math.round(600000 / S.cyc[i]) / 10 : 0, takt_s: 20, wip_out: wip, wip_max: wipMax, kanban,\n    state: now - S.last[i] < 15000 ? 'RUN' : 'WAIT', sim: true } });\n}\nout.push({ topic: 'cplab/prod/color/count', retain: true, payload: Object.assign({ total: S.c[3] }, S.col) });\n// maintenance: random breakdowns (~1 every 4 min per machine), repaired after 20-60 s\nfor (let i = 0; i < 4; i++) {\n  if (S.m[i] === 'RUN' && Math.random() < 1 / 240) { S.m[i] = 'ABNORMAL'; S.mt[i] = now + 20000 + Math.random() * 40000; }\n  else if (S.m[i] === 'ABNORMAL' && now > S.mt[i]) { S.m[i] = 'RUN'; }\n  if (S.tick % 5 === 0 || S.m[i] !== (S.prevM || [])[i])\n    out.push({ topic: `cplab/maint/m${i + 1}/state`, retain: true, payload: { m: i + 1, id: 'm' + (i + 1), name: 'Machine ' + (i + 1),\n      state: S.m[i], reason: S.m[i] === 'ABNORMAL' ? 'Vibrations excessives' : '', activity: S.m[i] === 'ABNORMAL' ? 95 : 25 + Math.random() * 8, sim: true } });\n}\nS.prevM = S.m.slice();\nflow.set('simState', S);\nnode.status({ fill: 'green', shape: 'ring', text: 'out: ' + S.c[3] });\nreturn [out];\n",
+  "outputs": 1,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 450,
+  "y": 160,
+  "wires": [
+   [
+    "cplabo053"
+   ]
+  ]
+ },
+ {
+  "id": "cplabj058",
+  "type": "inject",
+  "z": "cplabt004",
+  "name": "tick 1 s",
+  "props": [
+   {
+    "p": "payload"
+   },
+   {
+    "p": "topic",
+    "vt": "str"
+   }
+  ],
+  "repeat": "1",
+  "crontab": "",
+  "once": false,
+  "onceDelay": "2",
+  "topic": "",
+  "payload": "",
+  "payloadType": "date",
+  "x": 160,
+  "y": 160,
+  "wires": [
+   [
+    "cplabf057"
+   ]
+  ]
+ },
+ {
+  "id": "cplabx059",
+  "type": "function",
+  "z": "cplabt004",
+  "name": "reset sim state",
+  "func": "flow.set('simState', null);\nnode.status({text:'reset'});\nreturn null;",
+  "outputs": 0,
+  "timeout": 0,
+  "noerr": 0,
+  "initialize": "",
+  "finalize": "",
+  "libs": [],
+  "x": 420,
+  "y": 220,
+  "wires": []
+ },
+ {
+  "id": "cplabj060",
+  "type": "inject",
+  "z": "cplabt004",
+  "name": "Reset sim counters",
+  "props": [
+   {
+    "p": "payload"
+   },
+   {
+    "p": "topic",
+    "vt": "str"
+   }
+  ],
+  "repeat": "",
+  "crontab": "",
+  "once": false,
+  "onceDelay": "2",
+  "topic": "",
+  "payload": "",
+  "payloadType": "date",
+  "x": 180,
+  "y": 220,
+  "wires": [
+   [
+    "cplabx059"
+   ]
+  ]
+ }
+]
