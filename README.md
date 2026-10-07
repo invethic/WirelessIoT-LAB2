@@ -99,6 +99,14 @@ Production team (SNPI / AR4): Hall wiring and debounce, station firmware, colour
 
 BTS ATI 2nd year (Kanban, Organisation Industrielle) can work only with the Node-RED simulator and the web site at first: change `wip_max` and takt, observe where the line blocks, identify the bottleneck (station 3 is slower by design in the simulator), compute the required takt from a customer demand, compare cadence to takt per station, and propose a buffer sizing. Then repeat on the real line with the Tab5 stations.
 
+## Library links list
+
+https://arduino.esp8266.com/stable/package_esp8266com_index.json
+https://dl.espressif.com/dl/package_esp32_index.json
+https://espressif.github.io/arduino-esp32/package_esp32_index.json
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+https://static-cdn.m5stack.com/resource/arduino/package_m5stack_index.json
+
 ## Known limits
 
 - Firmware written for the m5stack esp32 core 3.2.x but not compiled in this package; expect small fixes on first build (pin choices, camera driver).
